@@ -930,8 +930,8 @@ static bool TabVisible(int t)
 }
 static const wchar_t *TabName(int t)
 {
-    static const wchar_t *fr[] = { L"VID\u00C9O", L"RENDU", L"EFFETS", L"COOP", L"SALON", L"TENUE", L"MODS", L"NOUVEAUT\u00C9S", L"RAY TRACING", L"JOURNAUX" },
-                         *en[] = { L"VIDEO", L"RENDERING", L"EFFECTS", L"CO-OP", L"LOBBY", L"OUTFIT", L"MODS", L"UPDATES", L"RAY TRACING", L"LOGS" };
+    static const wchar_t *fr[] = { L"VID\u00C9O", L"RENDU", L"EFFETS", L"COOP", L"SALON", L"TENUE", L"MODS", L"G\u00DCNCELLEMELER", L"RAY TRACING", L"JOURNAUX" },
+                         *en[] = { L"VIDEO", L"RENDERING", L"EFFECTS", L"CO-OP", L"LOBBY", L"OUTFIT", L"MODS", L"G\u00DCNCELLEMELER", L"RAY TRACING", L"LOGS" };
     return g_fr ? fr[t] : en[t];
 }
 static float MeasureW(Graphics &g, const std::wstring &s, float px, int style);
@@ -1123,7 +1123,8 @@ static int HitTab(float x, float y)
 }
 
 // ---------------------------------------------------------------- onglet NOUVEAUTES / UPDATES
-// Notes des versions publiees sur GitHub (releases, 40 dernieres) : le texte de chaque release est en francais,
+// Notes des versions publiees sur GitHub (releases, 40 dernieres) ; version du groupe : notes et onglet en turc.
+// Format d'origine : le texte de chaque release est en francais,
 // puis une ligne "---", puis en anglais (dist\make-release.ps1 -Notes). Gardees dans VCCoop\notes-maj.json pour
 // les lire hors ligne. Pastille sur l'onglet tant que la plus recente n'a pas ete vue (NotesVues du lanceur).
 struct Note { std::wstring ver, date, fr, en; };
@@ -1198,7 +1199,7 @@ static void ParseNotes(const std::string &json)
             n.en = CleanNote(enAt == std::wstring::npos ? L"" : body.substr(enAt + 1));
             if (n.en.empty()) n.en = n.fr;
         }
-        if (!n.ver.empty()) list.push_back(n);
+        if (!n.ver.empty() && n.ver[0] >= L'0' && n.ver[0] <= L'9') list.push_back(n);   // versions seulement (pas la release d'essai friends-*)
         at = end;
     }
     EnterCriticalSection(&g_cs);
@@ -1264,8 +1265,8 @@ static void DrawNotes(Graphics &g)
     notes = g_notes;
     LeaveCriticalSection(&g_cs);
     if (notes.empty()) {
-        Text(g, g_notesDone ? T(L"Notes de version indisponibles (hors ligne).", L"Release notes unavailable (offline).")
-                            : T(L"Chargement des notes de version\u2026", L"Loading release notes\u2026"), area, 13, FontStyleRegular, kGrey);
+        Text(g, g_notesDone ? L"G\u00FCncelleme notlar\u0131 al\u0131namad\u0131 (\u00E7evrimd\u0131\u015F\u0131)."
+                            : L"G\u00FCncelleme notlar\u0131 y\u00FCkleniyor\u2026", area, 13, FontStyleRegular, kGrey);
         return;
     }
     FontFamily fam(L"Segoe UI");
@@ -1288,7 +1289,7 @@ static void DrawNotes(Graphics &g)
             g.DrawString(n.date.c_str(), -1, &fd, PointF(area.X + 12 + tw, y + 3), &grey);
             int cmp = g_localVer.empty() ? 1 : CmpVer(n.ver, g_localVer);
             if (cmp >= 0 && !g_localVer.empty()) {   // version installee, ou plus recente (a venir)
-                const wchar_t *lab = cmp == 0 ? T(L"INSTALL\u00C9E", L"INSTALLED") : T(L"NOUVELLE", L"NEW");
+                const wchar_t *lab = cmp == 0 ? L"KURULU" : L"YEN\u0130";
                 RectF br(area.X + w - 12 - 7.0f * (float)wcslen(lab), y + 2, 12 + 7.0f * (float)wcslen(lab), 17);
                 GraphicsPath bp; RoundRect(bp, br, 8.5f);
                 SolidBrush bb(cmp == 0 ? Color(45, 38, 150, 96) : Color(45, 255, 79, 139));
