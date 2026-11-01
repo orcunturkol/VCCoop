@@ -1051,6 +1051,41 @@ void AutotestFrame()
         }
         return;
     }
+    if (_stricmp(g_cfg.autotest, "nage") == 0) {
+        // Teleporte en pleine mer devant Ocean Beach puis avance 30 s : sans mod de nage le joueur se noie,
+        // avec (CLEO + swim.cs) il nage. Sante, hauteur et etat du personnage (+0x244, 54/55 = meurt / mort) chaque seconde.
+        static int step;
+        static uint32_t at;
+        void *me = FindPlayerPed();
+        if (!me) return;
+        if (step == 0 && frame - controlSince > 450) {
+            // Vers l'est par pas de 8 m (le decor se charge en route), TestMer=distance totale
+            static float x0, goal;
+            static int n;
+            if (n == 0) {
+                char m[32];
+                GetPrivateProfileStringA("VCCoop", "TestMer", "600", m, sizeof(m), IniPath());
+                goal = (float)atof(m); x0 = Pos(me).x;
+                Log("autotest : depart (%.0f, %.0f, %.1f)", Pos(me).x, Pos(me).y, Pos(me).z);
+            }
+            if ((frame - controlSince) % 30 == 0) {
+                Vec3 p = Pos(me);
+                if (n > 0) Log("autotest : pas %d x %.0f z %.1f etat %d sante %.0f", n, p.x, p.z, *(int *)((uint8_t *)me + 0x244), Health(me));
+                n++;
+                if (p.x - x0 >= goal || *(int *)((uint8_t *)me + 0x244) >= 54) { step = 1; at = frame; Log("autotest : arrive x %.0f", p.x); return; }
+                Pos(me) = { p.x + 8.0f, p.y, p.z + 0.5f };
+                MoveSpeed(me) = { 0, 0, 0 };
+            }
+            return;
+        }
+        else if (step == 1) {
+            uint32_t t = frame - at;
+            if (t > 120 && t < 1800) Press(PAD_LSTICK_Y, -128);
+            if (t % 60 == 0) Log("autotest : nage t=%us sante %.0f z %.1f etat %d", t / 60, Health(me), Pos(me).z, *(int *)((uint8_t *)me + 0x244));
+            if (t >= 1860) { step = 2; Log("autotest : nage fin, sante %.0f etat %d", Health(me), *(int *)((uint8_t *)me + 0x244)); }
+        }
+        return;
+    }
     if (_stricmp(g_cfg.autotest, "triche") == 0) {
         // Sante a 30 puis ASPIRINE tape comme au clavier : 100 si les codes marchent, 30 si l'hote les interdit
         static int step;
