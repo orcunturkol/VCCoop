@@ -126,6 +126,8 @@ static void LoadConfig()
         else g_cfg.fpsKey = VK_F6;
     }
     g_cfg.noCheats = GetPrivateProfileIntA("VCCoop", "TrichesInterdites", 0, ini) != 0;
+    g_cfg.difficulty = GetPrivateProfileIntA("VCCoop", "Difficulte", 0, ini);
+    if (g_cfg.difficulty < 0 || g_cfg.difficulty > 2) g_cfg.difficulty = 0;
     g_cfg.autoSave =GetPrivateProfileIntA("VCCoop", "SauvegardeAuto", 1, ini) != 0;
     g_cfg.autoSaveSlot = GetPrivateProfileIntA("VCCoop", "SauvegardeAutoEmplacement", 8, ini);
     if (g_cfg.autoSaveSlot < 1 || g_cfg.autoSaveSlot > 8) g_cfg.autoSaveSlot = 8;

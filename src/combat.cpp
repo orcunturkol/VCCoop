@@ -141,7 +141,7 @@ void PuppetShoot(void *ped, int weapon)
 bool ApplyDamage(void *ped, void *damager, int weapon, float damage, int piece, uint8_t dir)
 {
     g_bypass = true;
-    bool r = o_InflictDamage(ped, NULL, damager, weapon, damage, piece, dir);
+    bool r = o_InflictDamage(ped, NULL, damager, weapon, damage * NpcDamageScale(ped, damager), piece, dir);
     g_bypass = false;
     return r;
 }
@@ -234,7 +234,7 @@ static bool __fastcall h_InflictDamage(void *ped, void *edx, void *damager, int 
             return false;
         }
     }
-    return o_InflictDamage(ped, edx, damager, weapon, damage, piece, dir);
+    return o_InflictDamage(ped, edx, damager, weapon, damage * NpcDamageScale(ped, damager), piece, dir);
 }
 
 // --- Corps a corps entre joueurs ---

@@ -328,6 +328,13 @@ static void RunAction(const Action &ac)
             break;
         }
         case 7: g_cfg.noCheats = !g_cfg.noCheats; WritePrivateProfileStringA("VCCoop", "TrichesInterdites", g_cfg.noCheats ? "1" : "0", IniPath()); break;
+        case 8: {
+            g_cfg.difficulty = (g_cfg.difficulty + 1) % 3;
+            char v[4];
+            _snprintf(v, sizeof(v), "%d", g_cfg.difficulty);
+            WritePrivateProfileStringA("VCCoop", "Difficulte", v, IniPath());
+            break;
+        }
         }
         MenuSaveIni();
         break;
@@ -760,6 +767,9 @@ static void DrawHostTab(float x0, float y0, float x1, float y1)
         { "R\xE9" "apparition pr\xE8s de l'h\xF4te", "Respawn next to the host", g_cfg.respawnAtHost ? yes : no, g_cfg.respawnAtHost },
         { "Densit\xE9 de population", "Population density", dens, false },
         { "Codes de triche interdits", "Cheat codes disabled", g_cfg.noCheats ? yes : no, g_cfg.noCheats },
+        { "Difficult\xE9 (ennemis plus r\xE9sistants, coups plus forts)", "Difficulty (tougher enemies, harder hits)",
+          g_cfg.difficulty >= 2 ? (fr ? "TR\xC8S DIFFICILE" : "VERY HARD") : g_cfg.difficulty == 1 ? (fr ? "DIFFICILE" : "HARD") : (fr ? "NORMALE" : "NORMAL"),
+          g_cfg.difficulty > 0 },
     };
     for (int i = 0; i < (int)(sizeof(o) / sizeof(o[0])); i++) {
         Rect(x0 + g_u * 0.5f, y, x1 - g_u * 0.5f, y + bh, C_PANEL);

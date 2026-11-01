@@ -79,6 +79,7 @@ struct Config {
     bool sharedMods;    // ModsPartages=1 : VCCoop\mods\ charge par le jeu et distribue aux invites (mods.cpp)
     bool keepWeapons;   // GarderArmes=1 : un invite mort ou arrete garde armes et argent
     bool noCheats;      // TrichesInterdites=1 (hote) : les codes de triche (clavier et onglet TRICHES) ne marchent chez personne
+    int difficulty;     // Difficulte=0/1/2 (hote) : personnages plus resistants et coups plus forts sur les joueurs (difficulty.cpp)
     bool autoSave;      // SauvegardeAuto=1 (hote) : sauvegarde apres chaque mission de l'histoire reussie (quicksave.cpp)
     int autoSaveSlot;   // SauvegardeAutoEmplacement=8 : son emplacement (1..8)
     int saveKey;        // ToucheSauvegarde=F5 (hote) : ouvre le menu de sauvegarde hors mission ; 0 = sans touche
@@ -119,6 +120,9 @@ void QuickSaveOnMissionStart();
 void QuickSaveOnMissionEnd(bool storyMission);
 void QuickSaveFrame();
 void QuickSaveTestTrigger();   // autotest "sauveauto"
+// difficulty.cpp : reglage Difficulte
+float NpcDamageScale(void *victim, void *damager);   // facteur des coups d'un personnage sur le joueur local
+void DifficultyFrame();
 
 // script.cpp
 void InstallScriptHooks();
