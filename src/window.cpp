@@ -116,7 +116,7 @@ static void FitWindow(HWND hwnd, int w, int h)
     o_SetWindowPos(hwnd, HWND_NOTOPMOST, g_cfg.winX, g_cfg.winY, r.right - r.left, r.bottom - r.top,
                    SWP_FRAMECHANGED | SWP_NOACTIVATE);
     char title[128];
-    wsprintfA(title, "GTA Vice City - VCCoop (%s)", g_cfg.playerName);
+    wsprintfA(title, "Tommy The Buddy (%s)", g_cfg.playerName);
     SetWindowTextA(hwnd, title);
 }
 

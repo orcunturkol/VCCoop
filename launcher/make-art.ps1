@@ -82,11 +82,11 @@ foreach ($dark in $false, $true) {
     $ink = New-Object System.Drawing.SolidBrush $(if ($dark) { [System.Drawing.Color]::FromArgb(235, 238, 228, 246) } else { [System.Drawing.Color]::FromArgb(225, 40, 32, 48) })
     $f1 = New-Object System.Drawing.Font 'Segoe UI Light', 30, ([System.Drawing.FontStyle]::Regular), ([System.Drawing.GraphicsUnit]::Pixel)
     $f2 = New-Object System.Drawing.Font 'Segoe UI', 13, ([System.Drawing.FontStyle]::Regular), ([System.Drawing.GraphicsUnit]::Pixel)
-    SpacedText $g 'GREETINGS FROM' $f1 $ink 715 262 9
-    SpacedText $g 'VICE CITY' $f1 $ink 715 302 13
+    SpacedText $g 'TOMMY THE' $f1 $ink 715 262 13
+    SpacedText $g 'BUDDY' $f1 $ink 715 302 16
     $lb = New-Object System.Drawing.Drawing2D.LinearGradientBrush (New-Object System.Drawing.PointF 575, 0), (New-Object System.Drawing.PointF 855, 0), ([System.Drawing.Color]::FromArgb(255, 255, 79, 139)), ([System.Drawing.Color]::FromArgb(255, 255, 138, 91))
     $g.FillRectangle($lb, 575, 350, 280, 2)
-    SpacedText $g 'THE STORY MISSIONS  ·  2 TO 4 PLAYERS' $f2 (New-Object System.Drawing.SolidBrush $(if ($dark) { [System.Drawing.Color]::FromArgb(215, 196, 180, 212) } else { [System.Drawing.Color]::FromArgb(210, 90, 76, 96) })) 715 364 3.2
+    SpacedText $g 'HAH SHIT BRARARARAA  ·  COMONN' $f2 (New-Object System.Drawing.SolidBrush $(if ($dark) { [System.Drawing.Color]::FromArgb(215, 196, 180, 212) } else { [System.Drawing.Color]::FromArgb(210, 90, 76, 96) })) 715 364 3.2
 
     # Panneau depoli : le fond sous le panneau, reduit puis agrandi (flou), voile blanc.
     $panelPath = RoundPath $panel 18
@@ -110,17 +110,18 @@ foreach ($dark in $false, $true) {
     $logo = [System.Drawing.Image]::FromFile((Join-Path $PSScriptRoot 'logo.png'))
     $src = AlphaBox $logo
     $dh = 196.0; $dw = $dh * $src.Width / $src.Height
-    if ($dw -gt 220) { $dw = 220.0; $dh = $dw * $src.Height / $src.Width }
-    $dst = New-Object System.Drawing.RectangleF (228 - $dw / 2), 8, $dw, $dh
+    if ($dw -gt 262) { $dw = 262.0; $dh = $dw * $src.Height / $src.Width }
+    $dst = New-Object System.Drawing.RectangleF (228 - $dw / 2), 46, $dw, $dh   # Tommy The Buddy : logo entre les boutons theme et notes, au-dessus de GitHub
     # halo doux derriere le logo pour qu'il se lise sur le bureau (blanc en clair, noir en sombre)
     for ($i = 6; $i -ge 1; $i--) {
         $ia = New-Object System.Drawing.Imaging.ImageAttributes
         $cm = New-Object System.Drawing.Imaging.ColorMatrix
-        $cm.Matrix00 = 0; $cm.Matrix11 = 0; $cm.Matrix22 = 0; $cm.Matrix33 = $(if ($dark) { 0.17 } else { 0.10 })
+        $cm.Matrix00 = 0; $cm.Matrix11 = 0; $cm.Matrix22 = 0; $cm.Matrix33 = $(if ($dark) { 0.09 } else { 0.06 })
         $v = $(if ($dark) { 0 } else { 1 })
         $cm.Matrix40 = $v; $cm.Matrix41 = $v; $cm.Matrix42 = $v   # halo blanc (clair) ou ombre noire (sombre : demande de JD, 29/09)
         $ia.SetColorMatrix($cm)
-        foreach ($o in @(@(-$i, 0), @($i, 0), @(0, -$i), @(0, $i))) {
+        $d = [int][Math]::Round($i * 0.7)   # diagonales aussi : halo regulier autour des lettres fines
+        foreach ($o in @(@(-$i, 0), @($i, 0), @(0, -$i), @(0, $i), @(-$d, -$d), @($d, -$d), @(-$d, $d), @($d, $d))) {
             $r = New-Object System.Drawing.Rectangle ([int]($dst.X + $o[0])), ([int]($dst.Y + $o[1])), ([int]$dst.Width), ([int]$dst.Height)
             $g.DrawImage($logo, $r, $src.X, $src.Y, $src.Width, $src.Height, [System.Drawing.GraphicsUnit]::Pixel, $ia)
         }

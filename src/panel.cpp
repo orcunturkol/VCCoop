@@ -1086,7 +1086,7 @@ static void DrawHelp()
         Rect(x0, y0, x1, y1, C_BG);
         Frame(x0, y0, x1, y1, g_u * 0.2f, C_LINE);
     }
-    TextA(x0 + g_u * 2, y0 + th * 0.5f - LineH(0.75f) * 0.5f, 0.75f, g_modern ? K_PINK : C_LINE, AL_LEFT, Tr("AIDE VCCOOP", "VCCOOP HELP"));
+    TextA(x0 + g_u * 2, y0 + th * 0.5f - LineH(0.75f) * 0.5f, 0.75f, g_modern ? K_PINK : C_LINE, AL_LEFT, Tr("AIDE TOMMY THE BUDDY", "TOMMY THE BUDDY HELP"));
     if (g_modern ? Button(x1 - th + g_u * 0.8f, y0 + g_u * 0.8f, x1 - g_u * 0.8f, y0 + th - g_u * 0.8f, "X") : Button(x1 - th, y0, x1, y0 + th, "X")) g_help = false;
     struct K { const char *key, *fr, *en; } keys[] = {
         { KeyLabel(g_menuKey), "Menu : joueurs (se t\xE9l\xE9porter), v\xE9hicules, outils, monde, h\xF4te, ray tracing", "Menu: players (teleport), vehicles, tools, world, host, ray tracing" },
@@ -1135,7 +1135,7 @@ static void DrawWelcome()
     }
     if (now < g_welcomeAt || now > g_welcomeAt + 9000 || g_help || !PlayerFree()) return;
     float t = (now - g_welcomeAt) / 9000.0f, a = t < 0.06f ? t / 0.06f : t > 0.9f ? (1 - t) / 0.1f : 1;
-    const char *txt = Tr("Bienvenue dans VCCOOP !   Appuyez sur F1 pour ouvrir l'aide", "Welcome to VCCOOP!   Press F1 to open the help");
+    const char *txt = Tr("Bienvenue dans TOMMY THE BUDDY !   Appuyez sur F1 pour ouvrir l'aide", "Welcome to TOMMY THE BUDDY!   Press F1 to open the help");
     float W = (float)ScreenW(), H = (float)ScreenH(), size = 0.62f;
     float tw = g_modern ? UiTextWidth(txt, LineH(size) * 1.12f, true) : W * 0.42f, bw = tw + g_u * 6, bh = LineH(size) + g_u * 2.6f;
     float x0 = (W - bw) * 0.5f, y0 = H * 0.16f - (1 - a) * g_u * 2;
@@ -1212,7 +1212,7 @@ void PanelDraw()
             Frame(x0, y0, x1, y1, g_u * 0.2f, C_LINE);
             Rect(x0, y0, x1, y0 + th, 0x2A1030FF);
         }
-        TextA(x0 + g_u * 2, y0 + th * 0.5f - LineH(0.75f) * 0.5f, 0.75f, g_modern ? K_PINK : C_LINE, AL_LEFT, "VCCOOP");
+        TextA(x0 + g_u * 2, y0 + th * 0.5f - LineH(0.75f) * 0.5f, 0.75f, g_modern ? K_PINK : C_LINE, AL_LEFT, "TOMMY THE BUDDY");
         char who[64];
         _snprintf(who, sizeof(who), "%s%s", g_cfg.playerName, g_cfg.host ? Tr("  -  h\xF4te", "  -  host") : LocalAdmin() ? "  -  admin" : "");
         TextA(x0 + g_u * 20, y0 + th * 0.5f - LineH(0.5f) * 0.5f, 0.5f, C_DIM, AL_LEFT, who);

@@ -228,13 +228,13 @@ static void BadExeMessage(ExeKind k)
                          : k == EXE_GOG   ? T(L"Ce gta-vc.exe est la version GOG.", L"This gta-vc.exe is the GOG version.")
                                           : T(L"Ce gta-vc.exe n'est pas la version 1.0.", L"This gta-vc.exe is not version 1.0.");
     std::wstring msg = first;
-    msg += T(L"\n\nVCCoop ne fonctionne qu'avec le gta-vc.exe de la version 1.0 (exe \u00AB downgrade \u00BB 1.0). "
+    msg += T(L"\n\nTommy The Buddy ne fonctionne qu'avec le gta-vc.exe de la version 1.0 (exe \u00AB downgrade \u00BB 1.0). "
              L"Les exe Steam, GOG et 1.1 ne sont pas compatibles.\n\n"
              L"Remplace l'exe du jeu par celui de la version 1.0, puis choisis-le dans le lanceur.",
-             L"\n\nVCCoop only works with the version 1.0 gta-vc.exe (1.0 \"downgrade\" exe). "
+             L"\n\nTommy The Buddy only works with the version 1.0 gta-vc.exe (1.0 \"downgrade\" exe). "
              L"The Steam, GOG and 1.1 exes are not compatible.\n\n"
              L"Replace the game's exe with the version 1.0 one, then pick it in the launcher.");
-    MessageBoxW(g_wnd, msg.c_str(), L"VCCoop", MB_ICONWARNING | MB_OK);
+    MessageBoxW(g_wnd, msg.c_str(), L"Tommy The Buddy", MB_ICONWARNING | MB_OK);
 }
 
 // ---------------------------------------------------------------- reglages
@@ -471,8 +471,8 @@ static DWORD WINAPI UpdateThread(void *)
     std::wstring local = g_localVer;
     if (!HttpGet(kRepoApi, &json, L"", false)) {
         g_progress = -1;
-        if (local.empty()) SetStatus(K_ERR, T(L"Hors ligne : VCCoop n'est pas install\u00E9 ici", L"Offline: VCCoop is not installed here"));
-        else SetStatus(K_WARN, T(L"Hors ligne \u00B7 VCCoop %s", L"Offline \u00B7 VCCoop %s"), local.c_str());
+        if (local.empty()) SetStatus(K_ERR, T(L"Hors ligne : Tommy The Buddy n'est pas install\u00E9 ici", L"Offline: Tommy The Buddy is not installed here"));
+        else SetStatus(K_WARN, T(L"Hors ligne \u00B7 Tommy The Buddy %s", L"Offline \u00B7 Tommy The Buddy %s"), local.c_str());
         g_busy = false;
         return 0;
     }
@@ -486,7 +486,7 @@ static DWORD WINAPI UpdateThread(void *)
     std::wstring remote = (!tag.empty() && (tag[0] == L'v' || tag[0] == L'V')) ? tag.substr(1) : tag;
     if (remote.empty() || zipUrl.empty() || (!local.empty() && CmpVer(remote, local) <= 0)) {
         g_progress = -1;
-        SetStatus(K_OK, T(L"VCCoop %s \u00B7 \u00E0 jour", L"VCCoop %s \u00B7 up to date"), local.empty() ? L"?" : local.c_str());
+        SetStatus(K_OK, T(L"Tommy The Buddy %s \u00B7 \u00E0 jour", L"Tommy The Buddy %s \u00B7 up to date"), local.empty() ? L"?" : local.c_str());
         g_busy = false;
         return 0;
     }
@@ -497,7 +497,7 @@ static DWORD WINAPI UpdateThread(void *)
     DeleteTree(work);
     CreateDirectoryW(work.c_str(), NULL);
     std::wstring zip = work + L"\\VCCoop.zip", ext = work + L"\\x";
-    SetStatus(K_NORMAL, T(L"T\u00E9l\u00E9chargement de VCCoop %s\u2026", L"Downloading VCCoop %s\u2026"), remote.c_str());
+    SetStatus(K_NORMAL, T(L"T\u00E9l\u00E9chargement de Tommy The Buddy %s\u2026", L"Downloading Tommy The Buddy %s\u2026"), remote.c_str());
     g_progress = 0;
     if (!HttpGet(zipUrl, NULL, zip, true)) {
         g_progress = -1;
@@ -506,7 +506,7 @@ static DWORD WINAPI UpdateThread(void *)
         g_busy = false;
         return 0;
     }
-    SetStatus(K_NORMAL, T(L"Installation de VCCoop %s\u2026", L"Installing VCCoop %s\u2026"), remote.c_str());
+    SetStatus(K_NORMAL, T(L"Installation de Tommy The Buddy %s\u2026", L"Installing Tommy The Buddy %s\u2026"), remote.c_str());
     g_progress = -2;
     CreateDirectoryW(ext.c_str(), NULL);
     wchar_t sys[MAX_PATH];
@@ -539,7 +539,7 @@ static DWORD WINAPI UpdateThread(void *)
         return 0;
     }
     LoadLocalVersion();
-    SetStatus(K_OK, T(L"Mis \u00E0 jour \u00B7 VCCoop %s", L"Updated \u00B7 VCCoop %s"), g_localVer.empty() ? remote.c_str() : g_localVer.c_str());
+    SetStatus(K_OK, T(L"Mis \u00E0 jour \u00B7 Tommy The Buddy %s", L"Updated \u00B7 Tommy The Buddy %s"), g_localVer.empty() ? remote.c_str() : g_localVer.c_str());
     g_busy = false;
     if (self) PostMessageW(g_wnd, WM_APP_RELAUNCH, 0, 0);
     return 0;
@@ -1282,7 +1282,7 @@ static void DrawNotes(Graphics &g)
         g.MeasureString(body.c_str(), -1, &fb, RectF(0, 0, w - 16, 100000), &sf, &box);
         float h = 26 + (body.empty() ? 0 : box.Height) + 16;
         if (y + h >= area.Y && y <= area.Y + area.Height) {
-            std::wstring title = L"VCCoop " + n.ver;
+            std::wstring title = L"Tommy The Buddy " + n.ver;
             g.DrawString(title.c_str(), -1, &fh, PointF(area.X + 6, y), &pink);
             float tw = MeasureW(g, title, 14.5f, FontStyleBold);
             g.DrawString(n.date.c_str(), -1, &fd, PointF(area.X + 12 + tw, y + 3), &grey);
@@ -3209,7 +3209,7 @@ static void OnButton(int id)
         else if (g_lobby == LB_NONE) LobbyHost();
         break;
     case B_JOIN:
-        if (g_lobby != LB_NONE) { LobbyClose(); SetStatus(K_NORMAL, L"VCCoop %s", g_localVer.c_str()); }
+        if (g_lobby != LB_NONE) { LobbyClose(); SetStatus(K_NORMAL, L"Tommy The Buddy %s", g_localVer.c_str()); }
         else if (g_joinFallback) { g_joinFallback = false; Launch(2); }
         else LobbyJoin();
         break;
@@ -3535,7 +3535,7 @@ int WINAPI wWinMain(HINSTANCE inst, HINSTANCE, LPWSTR, int)
     SkinsInit();
     if (g_exeKind == EXE_MISSING) SetStatus(K_ERR, T(L"Choisis ton gta-vc.exe (version 1.0)", L"Choose your gta-vc.exe (version 1.0)"));
     else if (g_exeKind != EXE_OK) SetStatus(K_ERR, T(L"Ce gta-vc.exe n'est pas la version 1.0", L"This gta-vc.exe is not version 1.0"));
-    else SetStatus(K_NORMAL, L"VCCoop %s", g_localVer.empty() ? L"" : g_localVer.c_str());
+    else SetStatus(K_NORMAL, L"Tommy The Buddy %s", g_localVer.empty() ? L"" : g_localVer.c_str());
 
     // /maj <exe> <journal> : verification + mise a jour sans fenetre (tests) ; journal = etat final
     if (argc >= 4 && !_wcsicmp(argv[1], L"/maj")) {
@@ -3666,8 +3666,8 @@ int WINAPI wWinMain(HINSTANCE inst, HINSTANCE, LPWSTR, int)
         else if (st == L"notes") { NotesFetch(); g_tab = TAB_NOTES; LayoutTabs(); }
         else if (st == L"journaux") { g_tab = TAB_LOGS; LogsScan(); g_logRowHot = 1; g_logPart = 2; g_btn[B_LOGS].hover = 1; }
         else if (st == L"tenue") { g_tab = TAB_SKIN; g_skinSel = 0; g_prevYaw = 0.35f; g_tileHot = 4; }
-        else if (st == L"maj") { g_busy = true; g_progress = 0.42f; SetStatus(K_NORMAL, T(L"T\u00E9l\u00E9chargement de VCCoop %s\u2026", L"Downloading VCCoop %s\u2026"), L"2026.09.29h"); g_focus = 0; g_time = 0.2f; }
-        else { g_localVer = g_localVer.empty() ? L"2026.09.29h" : g_localVer; SetStatus(K_OK, T(L"VCCoop %s \u00B7 \u00E0 jour", L"VCCoop %s \u00B7 up to date"), g_localVer.c_str()); g_hot = B_HOST; g_btn[B_HOST].hover = 1; }
+        else if (st == L"maj") { g_busy = true; g_progress = 0.42f; SetStatus(K_NORMAL, T(L"T\u00E9l\u00E9chargement de Tommy The Buddy %s\u2026", L"Downloading Tommy The Buddy %s\u2026"), L"2026.09.29h"); g_focus = 0; g_time = 0.2f; }
+        else { g_localVer = g_localVer.empty() ? L"2026.09.29h" : g_localVer; SetStatus(K_OK, T(L"Tommy The Buddy %s \u00B7 \u00E0 jour", L"Tommy The Buddy %s \u00B7 up to date"), g_localVer.c_str()); g_hot = B_HOST; g_btn[B_HOST].hover = 1; }
         int rc = 1;
         // tenues : attendre l'apercu et les portraits (fils de fond)
         if (g_imgOk && (st == L"tenue" || st == L"salon" || st == L"saloninvite" || st == L"mods")) {
@@ -3720,7 +3720,7 @@ int WINAPI wWinMain(HINSTANCE inst, HINSTANCE, LPWSTR, int)
     int x = work.left + (work.right - work.left - g_winW) / 2, y = work.top + (work.bottom - work.top - g_winH) / 2;
     bool test = !g_testLog.empty();
     if (test) x = y = -5000;
-    g_wnd = CreateWindowExW(WS_EX_LAYERED | (test ? WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW : WS_EX_APPWINDOW), wc.lpszClassName, L"VCCoop", WS_POPUP | WS_MINIMIZEBOX | WS_SYSMENU,
+    g_wnd = CreateWindowExW(WS_EX_LAYERED | (test ? WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW : WS_EX_APPWINDOW), wc.lpszClassName, L"Tommy The Buddy", WS_POPUP | WS_MINIMIZEBOX | WS_SYSMENU,
                             x, y, g_winW, g_winH, NULL, NULL, inst, NULL);
 
     BITMAPINFO bi = {};

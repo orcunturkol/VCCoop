@@ -475,7 +475,7 @@ static void GuestReceive(const uint8_t *buf, int len, const sockaddr_in &from)
             if (version) Log("reseau : l'hote refuse : version differente (la sienne %d, la notre %d)", f->hostVersion, NET_VERSION);
             else Log("reseau : l'hote refuse : partie pleine");
             if (g_onNotice) g_onNotice(version ? "version differente de l'hote : meme zip VCCoop pour tous" : "partie pleine",
-                                       version ? "different version from the host: same VCCoop zip for everybody" : "game is full", 0);
+                                       version ? "different version from the host: restart the launcher to update" : "game is full", 0);
         }
         break;
     }

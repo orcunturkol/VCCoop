@@ -13,11 +13,11 @@ BEGIN
     BLOCK "040C04B0"
     BEGIN
       VALUE "CompanyName", "VCCoop"
-      VALUE "FileDescription", "VCCoop - lanceur"
+      VALUE "FileDescription", "Tommy The Buddy"
       VALUE "FileVersion", "1.0"
       VALUE "InternalName", "VCCoop"
       VALUE "OriginalFilename", "VCCoop.exe"
-      VALUE "ProductName", "VCCoop"
+      VALUE "ProductName", "Tommy The Buddy"
       VALUE "ProductVersion", "1.0"
     END
   END
