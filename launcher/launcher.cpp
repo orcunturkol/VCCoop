@@ -4,7 +4,7 @@
 //    alpha par pixel) ; textes, champs et boutons dessines par-dessus avec GDI+.
 //  - Cible gta-vc.exe : celui du dossier, ou celui choisi (retenu dans vccoop-launcher.ini). Seul l'exe 1.0 est
 //    accepte (meme signature que dllmain.cpp IsVersion10) ; Steam, GOG, 1.1 : message, sans lien.
-//  - A chaque lancement : derniere version publiee sur GitHub (Parricidium/VCCoop, releases/latest). Plus recente
+//  - A chaque lancement : derniere version publiee sur GitHub (orcunturkol/VCCoop, version du groupe, releases/latest). Plus recente
 //    que VCCoop\version.txt (ou mod absent) : telechargement du zip, extraction (tar.exe de Windows), copie dans le
 //    dossier du jeu. vccoop.ini de l'utilisateur garde ses valeurs (seules les cles nouvelles sont ajoutees) ;
 //    vccoop-joueur.ini n'est pas dans le paquet. Le lanceur se remplace lui-meme (renomme en .old) puis se relance.
@@ -39,7 +39,7 @@ using std::max;
 
 using namespace Gdiplus;
 
-static const wchar_t *kRepoApi = L"https://api.github.com/repos/Parricidium/VCCoop/releases/latest";
+static const wchar_t *kRepoApi = L"https://api.github.com/repos/orcunturkol/VCCoop/releases/latest";
 static const wchar_t *kStoreUrl = L"https://store.rockstargames.com/fr/game/buy-grand-theft-auto-the-trilogy";   // (meme lien que le README)
 static const float kImgW = 1000, kImgH = 620;   // mise en page (coordonnees de launcher.png)
 
@@ -1209,7 +1209,7 @@ static void NotesFetch()
 {
     std::wstring cache = g_dir + L"VCCoop\\notes-maj.json";
     std::string json;
-    if (HttpGet(L"https://api.github.com/repos/Parricidium/VCCoop/releases?per_page=40", &json, L"", false) && json.find("\"tag_name\"") != std::string::npos) {
+    if (HttpGet(L"https://api.github.com/repos/orcunturkol/VCCoop/releases?per_page=40", &json, L"", false) && json.find("\"tag_name\"") != std::string::npos) {
         HANDLE f = CreateFileW(cache.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL);
         if (f != INVALID_HANDLE_VALUE) { DWORD w; WriteFile(f, json.data(), (DWORD)json.size(), &w, NULL); CloseHandle(f); }
     } else {

@@ -1,5 +1,5 @@
 ﻿# Compile VCCoop puis assemble dist\out\VCCoop-<date>.zip (sans aucune donnee du jeu).
-# -Publier : cree la release v<Version> sur GitHub (Parricidium/VCCoop) avec le zip ; le lanceur (VCCoop.exe) la
+# -Publier : cree la release v<Version> sur GitHub (orcunturkol/VCCoop) avec le zip ; le lanceur (VCCoop.exe) la
 # trouve au prochain demarrage de chaque joueur. -Notes : texte de la release.
 param([string]$Version = (Get-Date -Format 'yyyy.MM.dd'), [switch]$Publier, [string]$Notes = '')
 $root = Split-Path $PSScriptRoot
@@ -30,9 +30,9 @@ if ($Publier) {
     if (-not $Notes) { $Notes = "VCCoop $Version" }
     $nf = [System.IO.Path]::GetTempFileName()
     [System.IO.File]::WriteAllText($nf, $Notes, (New-Object System.Text.UTF8Encoding $false))
-    gh release create "v$Version" $zip --repo Parricidium/VCCoop --title "VCCoop $Version" --notes-file $nf --latest
+    gh release create "v$Version" $zip --repo orcunturkol/VCCoop --title "VCCoop $Version" --notes-file $nf --latest
     $rc = $LASTEXITCODE
     Remove-Item $nf
     if ($rc -ne 0) { throw "echec de la publication GitHub" }
-    "Publie : https://github.com/Parricidium/VCCoop/releases/tag/v$Version"
+    "Publie : https://github.com/orcunturkol/VCCoop/releases/tag/v$Version"
 }
