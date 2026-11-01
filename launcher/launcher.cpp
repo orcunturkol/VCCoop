@@ -3219,7 +3219,7 @@ static void OnButton(int id)
     case B_MIN: ShowWindow(g_wnd, SW_MINIMIZE); break;
     case B_THEME: g_dark = !g_dark; WritePrivateProfileStringW(L"Lanceur", L"Theme", g_dark ? L"sombre" : L"clair", g_iniLauncher.c_str()); break;
     case B_BUY: ShellExecuteW(g_wnd, L"open", kStoreUrl, NULL, NULL, SW_SHOWNORMAL); break;
-    case B_GITHUB: ShellExecuteW(g_wnd, L"open", L"https://github.com/Parricidium", NULL, NULL, SW_SHOWNORMAL); break;
+    case B_GITHUB: ShellExecuteW(g_wnd, L"open", L"https://github.com/orcunturkol/VCCoop", NULL, NULL, SW_SHOWNORMAL); break;
     case B_LOGS: g_tab = g_tab == TAB_LOGS ? -1 : TAB_LOGS; g_optHot = -1; if (g_tab == TAB_LOGS) LogsScan(); break;
     }
 }
