@@ -38,6 +38,30 @@ static void GuardSectorList()
     PatchJump(0x4B1190, s, sizeof(orig));
 }
 
+// Meme fonction, plus haut (0x4B0347) : "mov eax,[ecx]" lit la tete d'une liste de secteur dont l'adresse a ete
+// calculee depuis la boite du personnage ou du vehicule traite. Une boite aberrante donne une adresse hors des
+// tableaux de secteurs (plantage acces 41154CC4, invite de Tommy The Buddy, 01/11, au Pole Position pendant "The
+// Party", sans garde-fou de position declenche). Les listes sont dans l'exe (0x400000-0xA14000) : hors de la, la
+// liste est traitee comme vide (suite en 0x4B0F63, celle du jz d'origine).
+static void GuardSectorListHead()
+{
+    static const uint8_t orig[] = { 0x8B, 0x01, 0x85, 0xC0, 0x89, 0x44, 0x24, 0x18, 0x0F, 0x84, 0x0E, 0x0C, 0x00, 0x00 };
+    if (!Expect(0x4B0347, "liste de secteur hors des tableaux", orig, sizeof(orig))) return;
+    uint8_t *s = (uint8_t *)VirtualAlloc(NULL, 64, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+    int n = 0;
+    s[n++] = 0x81; s[n++] = 0xF9; *(uint32_t *)(s + n) = 0x00400000; n += 4;   // cmp ecx,0x400000
+    s[n++] = 0x72; s[n++] = 0x15;                                               // jb vide (+21)
+    s[n++] = 0x81; s[n++] = 0xF9; *(uint32_t *)(s + n) = 0x00A14000; n += 4;   // cmp ecx,0xA14000
+    s[n++] = 0x73; s[n++] = 0x0D;                                               // jae vide (+13)
+    memcpy(s + n, orig, 8); n += 8;                                             // mov eax,[ecx] ; test ; mov [esp+18],eax
+    s[n++] = 0xE9; *(int32_t *)(s + n) = (int32_t)(0x4B034F - ((uintptr_t)s + n + 4)); n += 4;   // vers le jz d'origine
+    // vide :
+    s[n++] = 0x31; s[n++] = 0xC0;                                               // xor eax,eax
+    s[n++] = 0x89; s[n++] = 0x44; s[n++] = 0x24; s[n++] = 0x18;                 // mov [esp+18],eax
+    s[n++] = 0xE9; *(int32_t *)(s + n) = (int32_t)(0x4B0F63 - ((uintptr_t)s + n + 4)); n += 4;   // liste vide
+    PatchJump(0x4B0347, s, 8);
+}
+
 // CAutomobile::OpenDoor (0x59CF50, component, porte, ouverture) : CMatrix(RwFrameGetMatrix(m_aCarNodes[component]))
 // sans verifier la piece. Certains modeles de packs (voitures converties de GTA IV / V) n'ont pas toutes les portieres :
 // un personnage qui en ouvrait une plantait le jeu (0x4DFB30, acces 0x10 ; invite de JD, 29/09, NextGen Cars Pack).
@@ -90,6 +114,7 @@ static void __fastcall h_AddCheat(void *pad, void *, char c)
 void InstallGamePatches()
 {
     GuardSectorList();
+    GuardSectorListHead();
     static const uint8_t addCheatPro[] = { 0x53, 0x56, 0x57, 0x55, 0x83, 0xEC, 0x10 };
     o_AddCheat = (AddCheat_t)MakeDetour(0x4ABD20, addCheatPro, sizeof(addCheatPro), (void *)h_AddCheat);
     if (!o_AddCheat) Log("codes de triche interdits : CPad::AddToPCCheatString introuvable");
