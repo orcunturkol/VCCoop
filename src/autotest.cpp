@@ -1051,6 +1051,21 @@ void AutotestFrame()
         }
         return;
     }
+    if (_stricmp(g_cfg.autotest, "maj") == 0) {
+        // Marche 3 s, puis Maj gauche simulee 3 s (sprint.cpp), puis relache : etat de deplacement (+0x24C) et vitesse
+        extern bool g_testShiftHeld;
+        uint32_t t = frame - controlSince;
+        void *me = FindPlayerPed();
+        if (t < 300 || t > 1000) return;
+        if (t < 900) Press(PAD_LSTICK_Y, -128);
+        g_testShiftHeld = t >= 480 && t < 660;
+        if (t % 60 == 0) {
+            Vec3 s = MoveSpeed(me);
+            Log("autotest : maj %s, deplacement %d, vitesse %.2f", g_testShiftHeld ? "tenue" : "relachee",
+                *(int *)((uint8_t *)me + 0x24C), sqrtf(s.x * s.x + s.y * s.y) * 50.0f);
+        }
+        return;
+    }
     if (_stricmp(g_cfg.autotest, "nage") == 0) {
         // Teleporte en pleine mer devant Ocean Beach puis avance 30 s : sans mod de nage le joueur se noie,
         // avec (CLEO + swim.cs) il nage. Sante, hauteur et etat du personnage (+0x244, 54/55 = meurt / mort) chaque seconde.

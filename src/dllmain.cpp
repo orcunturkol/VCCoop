@@ -127,6 +127,7 @@ static void LoadConfig()
     }
     g_cfg.noCheats = GetPrivateProfileIntA("VCCoop", "TrichesInterdites", 0, ini) != 0;
     g_cfg.difficulty = GetPrivateProfileIntA("VCCoop", "Difficulte", 0, ini);
+    g_cfg.shiftSprint = GetPrivateProfileIntA("VCCoop", "CourseShift", 1, ini) != 0;
     if (g_cfg.difficulty < 0 || g_cfg.difficulty > 2) g_cfg.difficulty = 0;
     g_cfg.autoSave =GetPrivateProfileIntA("VCCoop", "SauvegardeAuto", 1, ini) != 0;
     g_cfg.autoSaveSlot = GetPrivateProfileIntA("VCCoop", "SauvegardeAutoEmplacement", 8, ini);
