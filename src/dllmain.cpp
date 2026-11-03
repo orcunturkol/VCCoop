@@ -228,6 +228,13 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID)
         MessageBoxA(NULL, "VCCoop a besoin de gta-vc.exe en version 1.0.\nLe mod est desactive.", "VCCoop", MB_ICONWARNING);
         return TRUE;
     }
+    // Le jeu lit ses fichiers (data\, models\, TEXT\...) depuis le dossier courant : on le fixe au dossier de l'exe,
+    // pour que le jeu lance d'ailleurs (Steam, option de lancement "...\gta-vc.exe %command%") prenne bien ce dossier-ci.
+    {
+        char cur[MAX_PATH];
+        GetCurrentDirectoryA(MAX_PATH, cur);
+        if (SetCurrentDirectoryA(GameDir()) && lstrcmpiA(cur, GameDir()) != 0) Log("dossier courant %s -> %s", cur, GameDir());
+    }
     StartWatchdog();
     InstallGamePatches();
     InstallWindowHooks();
